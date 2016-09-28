@@ -1,2 +1,2 @@
-# rhythmtest
-Trying to get beat detection and playback working.
+# ants
+Cellular automata programming game
