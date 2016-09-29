@@ -1,0 +1,56 @@
+dev log
+
+day 2
+woke at 9
+up at 10
+downstairs at 11:16
+porridge a vehicle for muscovado, nutmeg, cinnamon
+four organs
+coffee
+
+first up is generalising shadow sprites. DONE
+move monsters over DONE
+make spores land
+wind direction
+
+the idea of spores being their own sprites, moving and landing is just a bit too fiddly.
+should just have a dandelion spread its influence manually to squares nearby.
+
+Plants spread.
+Foragers keep plants in line.
+Ants eat foragers and keep plants in line so they probably need to eat at the same rate.
+
+Foragers probably eat a bit too quick right now.
+All the time scales are messed up.
+went skating
+	- rocked over the spine
+	- did a accidental shove-it nose revert
+slept about 4
+
+day 3
+up at about 12
+egg mayo
+beatles
+coffee
+
+i'm not sure what the interaction between predators and ants should look like.
+hazard pheromones aren't redrawing.
+
+waiting for internet.
+
+alpha is really slow.
+
+need to change render AGAIN!
+just get the total colour and draw once. Otherwise danger isn't getting redrawn. Or anything that's not on a home tile.
+
+day 4
+react
+codemirror
+made a butternut squash and sausage shepherd's pie, pretty good
+	- dice and boil squash for 15 minutes
+	- chop, fry sausages with bacon and red onions, and some stock and tomato and reduce
+		- oh and sage
+	- drain and mash squash with butter, salt, pepper, parmesan, cinnamon
+	- layer squash on top of sausages, sprinkle more parmesan, bake at 200C until crispy
+
+drank lots of mint tea and played overwatch

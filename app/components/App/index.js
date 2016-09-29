@@ -3,6 +3,10 @@ import Game from '../Game';
 import Editor from '../Editor';
 
 class App extends Component {
+  componentDidMount() {
+    console.log(this.refs.game);
+  }
+
   render() {
     return (
       <div 
@@ -11,12 +15,12 @@ class App extends Component {
       		height: '100vh'
       	}}
       >
-      	<div style={{background: 'red', position: 'relative', display: 'inline-block', width: '50%', height: '100%'}}>
+      	<div style={{position: 'relative', display: 'inline-block', width: '50%', height: '100%'}}>
         	<Editor/>
         </div>
 
         <div style={{position: 'relative', display: 'inline-block', width: '50%', height: '100%'}}>
-        	<Game/>
+        	<Game ref="game"/>
         </div>
       </div>
     );

@@ -33,7 +33,6 @@ class Sprite extends Entity {
 			this.image = Images.cache[key];
 			this.width = this.image.width;
 			this.height = this.image.height;
-			console.log(this.image.complete, this.image.width);
 		}
 	}
 

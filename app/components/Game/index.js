@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import GameEngine from './engine';
 
 class Game extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      game: null
+    };
+  }
+
 	componentDidMount() {
 		var canvas = this.refs.canvas;
 		var ctx = canvas.getContext('2d');
@@ -13,7 +20,7 @@ class Game extends Component {
   render() {
     return (
       <div 
-      	ref="div" 
+      	ref="div"
       	style={{
       		width: '100%', 
       		height: '100%',

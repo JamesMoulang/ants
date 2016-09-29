@@ -53,6 +53,8 @@ class Game {
 		this.timescale = this._timescale + 0;
 		window.onblur = this.pause.bind(this);
 		window.onfocus = this.play.bind(this);
+		this.parent.onblur = this.pause.bind(this);
+		this.parent.onfocus = this.play.bind(this);
 		this.pictureWaitTime = 10000;
 		this.pictureCounter = 0;
 		this.activeCells = [];
@@ -148,7 +150,6 @@ class Game {
 	resizeCanvas () {
 		var width = this.parent.clientWidth;
 		var height = this.parent.clientHeight;
-		console.log(width, height);
 
 		this.canvas.width = width;
 		this.canvas.height = height;
