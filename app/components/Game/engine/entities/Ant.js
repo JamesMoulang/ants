@@ -28,6 +28,10 @@ class Ant extends Square {
 		];
 		this.spiralMoveIndex = this.spiralMoves.length;
 
+		if (this.game.antFunction != null) {
+			this.tick = this.game.antFunction.bind(this);
+		}
+
 		// this.walkAudio = Audio.create('tick');
 		// this.walkAudio.volume(0.0005);
 		// this.findAudio = Audio.create('Gs3');
@@ -36,6 +40,10 @@ class Ant extends Square {
 		// this.carryAudio.volume(0.01);
 		// this.followAudio = Audio.create('Ds4');
 		// this.followAudio.volume(0.01);
+	}
+
+	setFunction(func) {
+		this.tick = func.bind(this);
 	}
 
 	lookAroundYou(radius, callback) {

@@ -69,6 +69,7 @@ class Game {
 		this.monsters = [];
 		this.antUpdateRate = 12;
 		this.antUpdateCounter = 0;
+		this.antFunction = null;
 
 		this.cellUpdateRate = 24;
 		this.cellUpdateCounter = 0;
@@ -119,6 +120,23 @@ class Game {
 		Audio.load('Cs4', '/xylophone/Cs4.wav');
 		Audio.load('Ds4', '/xylophone/Ds4.wav');
 		Audio.load('Fs4', '/xylophone/Fs4.wav');
+	}
+
+	submitCode(code, callback) {
+		try {
+			var func = new Function(code);
+			this.updateAntFunction(func);
+			callback(undefined, "Good!");
+		} catch (err) {
+			callback(err);
+		}
+	}
+
+	updateAntFunction(func) {
+		this.antFunction = func;
+		_.each(this.ants, function(ant) {
+			ant.setFunction(this.antFunction);
+		}.bind(this));
 	}
 
 	pause() {

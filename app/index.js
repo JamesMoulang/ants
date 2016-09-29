@@ -1,19 +1,29 @@
-// import Game from './Game';
-
-// window.onload = function() {
-// 	var canvas = document.getElementById('canvas');
-// 	var ctx = canvas.getContext('2d');
-// 	canvas.style.zIndex = -100;
-// 	var game = new Game(1024, 768, canvas, ctx, 30);
-// 	game.start();
-// };
-
 import 'babel-polyfill';
 import React, {Component} from 'react';
 import { render } from 'react-dom';
 import { App } from './components';
 
+import createLogger from 'redux-logger';
+import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import rootReducer from './reducers';
+
+const loggerMiddleware = createLogger();
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware,
+    loggerMiddleware
+  )
+);
+
 render(
-	<App/>,
+	(
+		<Provider store={store}>
+			<App/>
+		</Provider>
+	),
 	document.getElementById('root')
 );

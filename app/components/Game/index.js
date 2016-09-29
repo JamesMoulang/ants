@@ -1,12 +1,64 @@
 import React, { Component } from 'react';
 import GameEngine from './engine';
+import { pause, play } from '../../actions/Game';
+import { successAntCode } from '../../actions/Code';
+import { connect } from 'react-redux';
 
-class Game extends Component {
+function mapStateToProps(state) {
+  return {
+    code: state.Code.code,
+    paused: state.Game.paused,
+    pushed: state.Code.pushed
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    pause: () => {
+      dispatch(pause());
+    },
+    play: () => {
+      dispatch(play());
+    },
+    successAntCode: () => {
+      dispatch(successAntCode());
+    }
+  };
+}
+
+class GameComponent extends Component {
   constructor(props) {
     super(props);
+    this.onClick = this.onClick.bind(this);
     this.state = {
       game: null
     };
+  }
+
+  componentDidUpdate() {
+    if (this.state.game != null) {
+      if (this.props.paused) {
+        this.state.game.pause();
+      } else {
+        this.state.game.play();
+      }
+    }
+
+    if (!this.props.pushed) {
+      this.state.game.submitCode(this.props.code, function(err, res) {
+        if (typeof(err) === 'undefined') {
+          this.props.successAntCode();
+        } else {
+          console.error(err);
+        }
+      }.bind(this));
+    }
+  }
+
+  onClick() {
+    if (this.props.paused) {
+      this.props.play();
+    }
   }
 
 	componentDidMount() {
@@ -15,11 +67,13 @@ class Game extends Component {
 		canvas.style.zIndex = -100;
 		var engine = new GameEngine(1024, 768, this.refs.div, canvas, ctx, 30);
 		engine.start();
+    this.setState({game: engine});
 	}
 
   render() {
     return (
       <div 
+        onClick={this.onClick}
       	ref="div"
       	style={{
       		width: '100%', 
@@ -28,7 +82,7 @@ class Game extends Component {
       		position: 'relative'
       	}}
       >
-        <canvas 
+        <canvas
         	ref="canvas" 
         	style={{
 	        	display: 'block', 
@@ -40,5 +94,10 @@ class Game extends Component {
     );
   }
 }
+
+const Game = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GameComponent);
 
 export default Game;
