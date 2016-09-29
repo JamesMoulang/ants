@@ -33,6 +33,7 @@ class Sprite extends Entity {
 			this.image = Images.cache[key];
 			this.width = this.image.width;
 			this.height = this.image.height;
+			console.log(this.image.complete, this.image.width);
 		}
 	}
 
@@ -48,6 +49,7 @@ class Sprite extends Entity {
 			var y = midPoint.y + (this.position.y - this.game.camera.position.y) * 16 * this.game.camera.scale;
 			var width = this.width * this.game.camera.scale;
 			var height = this.height * this.game.camera.scale;
+			// console.log(width, height, this.game.camera.scale, this.width, this.height);
 
 			ctx.globalAlpha = this.alpha;
 			ctx.drawImage(

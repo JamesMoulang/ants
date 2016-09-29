@@ -1,9 +1,9 @@
 import Monster from './Monster';
-import TickState from './TickState';
-import Vector from './Vector';
-import TickStateMachine from './TickStateMachine';
+import TickState from '../TickState';
+import Vector from '../Vector';
+import TickStateMachine from '../TickStateMachine';
 import Spore from './Spore';
-import Maths from './Maths';
+import Maths from '../Maths';
 
 const STATE_KEYS = {
 	GROWING: 'GROWING',

@@ -6,6 +6,7 @@ var Images = {
 	loading: false,
 	onLoad: null,
 	interval: null,
+	keys: [],
 
 	load: function(key, url) {
 		this.loadedCount++;
@@ -21,6 +22,7 @@ var Images = {
 			console.warn("Already cached a image with key " + key);
 		} else {
 			this.cache[key] = img;
+			this.keys.push(key);
 		}
 
 		this.interval = setInterval(function() {
@@ -34,7 +36,13 @@ var Images = {
 	},
 
 	isLoaded: function() {
-		return this.loading && this.loadedCount == 0;
+		var complete = true;
+		_.each(this.keys, function(key) {
+			if (!this.cache[key].complete) {
+				complete = false;
+			}
+		}.bind(this));
+		return complete;
 	}
 }
 

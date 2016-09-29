@@ -1,7 +1,7 @@
-import Sprite from './Sprite';
-import Group from './Group';
-import Vector from './Vector';
-import ShadowSprite from './ShadowSprite';
+import Sprite from '../Sprite';
+import Group from '../Group';
+import Vector from '../Vector';
+import ShadowSprite from '../ShadowSprite';
 
 class Monster extends ShadowSprite {
 	constructor(game, grid, position, canvas, key, hitbox) {
@@ -23,6 +23,7 @@ class Monster extends ShadowSprite {
 		this.health = 250;
 
 		this.move(new Vector(0, 0));
+		this.game.shouldRender = true;
 	}
 
 	attack() {

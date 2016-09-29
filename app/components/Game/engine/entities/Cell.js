@@ -1,6 +1,6 @@
-import Vector from './Vector';
-import Square from './Square';
-import Maths from './Maths';
+import Vector from '../Vector';
+import Square from '../Square';
+import Maths from '../Maths';
 import Pheromone from './Pheromone';
 import Dandelion from './Dandelion';
 
@@ -336,7 +336,9 @@ class Cell extends Square {
 					colour.b -= this.pheromones[key].rgb.b * a;
 				}
 			}
-
+			colour.r = Maths.clamp(colour.r, 0, 255);
+			colour.g = Maths.clamp(colour.g, 0, 255);
+			colour.b = Maths.clamp(colour.b, 0, 255);
 			this.alpha = 1;
 			this.colour = Maths.parseRGB(colour);
 			this.size = 16;

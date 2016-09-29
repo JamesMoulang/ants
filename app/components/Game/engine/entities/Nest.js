@@ -1,6 +1,6 @@
-import Square from './Square'
+import Square from '../Square'
 import Ant from './Ant';
-import Vector from './Vector';
+import Vector from '../Vector';
 import Grid from './Grid';
 
 class Nest extends Square {

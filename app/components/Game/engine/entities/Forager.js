@@ -1,7 +1,7 @@
 import Monster from './Monster';
-import Vector from './Vector';
-import TickStateMachine from './TickStateMachine';
-import TickState from './TickState';
+import Vector from '../Vector';
+import TickStateMachine from '../TickStateMachine';
+import TickState from '../TickState';
 
 var STATE_KEYS = {
 	IDLE: 'IDLE',

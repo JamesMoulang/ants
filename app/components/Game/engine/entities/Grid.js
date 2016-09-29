@@ -1,7 +1,7 @@
 import Cell from './Cell';
-import Entity from './Entity';
-import Vector from './Vector';
-import Maths from './Maths';
+import Entity from '../Entity';
+import Vector from '../Vector';
+import Maths from '../Maths';
 import Forager from './Forager';
 import Predator from './Predator';
 

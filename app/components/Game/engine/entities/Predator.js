@@ -1,7 +1,7 @@
 import Monster from './Monster';
-import Vector from './Vector';
-import TickStateMachine from './TickStateMachine';
-import TickState from './TickState';
+import Vector from '../Vector';
+import TickStateMachine from '../TickStateMachine';
+import TickState from '../TickState';
 
 class Predator extends Monster {
 	constructor(game, grid, position, canvas) {
@@ -39,7 +39,6 @@ class Predator extends Monster {
 	}
 
 	chomp() {
-		console.log("nom.");
 		this.forHitbox(function(cell) {
 			cell.makeDeadly();
 		}.bind(this));
@@ -47,21 +46,25 @@ class Predator extends Monster {
 
 	tick() {
 		super.tick();
-		if (this.attacked) {
-			this.rage--;
-			if (this.rage < 0) {
-				this.calm();
-			} else {
-				this.attackTimer++;
-				if (this.attackTimer > this.attackCooldown) {
-					this.attackTimer-=this.attackCooldown;
-					this.chomp();
+		if (this.alive) {
+			if (this.attacked) {
+				this.rage--;
+				if (this.rage < 0) {
+					this.calm();
+				} else {
+					this.attackTimer++;
+					if (this.attackTimer > this.attackCooldown) {
+						this.attackTimer-=this.attackCooldown;
+						this.chomp();
+					}
+					this.move(new Vector(
+						Math.round((Math.random() - 0.5) * 2), 
+						Math.round((Math.random() - 0.5) * 2)
+					));
 				}
-				this.move(new Vector(
-					Math.round((Math.random() - 0.5) * 2), 
-					Math.round((Math.random() - 0.5) * 2)
-				));
 			}
+		} else {
+			console.log("aha!");
 		}
 	}
 }

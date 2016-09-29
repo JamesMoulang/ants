@@ -1,9 +1,9 @@
-import Entity from './Entity';
-import Vector from './Vector';
+import Entity from '../Entity';
+import Vector from '../Vector';
 import Grid from './Grid';
-import Audio from './Audio';
+import Audio from '../Audio';
 import Pheromone from './Pheromone';
-import Square from './Square';
+import Square from '../Square';
 
 class Ant extends Square {
 	constructor(game, grid, position = new Vector(0, 0), size = 16) {
@@ -103,7 +103,6 @@ class Ant extends Square {
 		) {
 			this.grid.cells[this.position.x][this.position.y].deathToAnts = false;
 			this.destroy();
-			console.log("I got eaten!");
 		} else {
 			var move = new Vector(0, 0);
 
@@ -206,6 +205,8 @@ class Ant extends Square {
 				}
 
 				if (this.grid.cells[this.position.x][this.position.y].monsters.length > 0) {
+
+
 					this.grid.cells[this.position.x][this.position.y].monsters[0].attack();
 					this.pheromoneCloud(8, 'danger', '1', 10, false, 1);
 				}

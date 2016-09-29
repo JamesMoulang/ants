@@ -1,6 +1,6 @@
-import Sprite from './Sprite';
-import Vector from './Vector';
-import ShadowSprite from './ShadowSprite';
+import Sprite from '../Sprite';
+import Vector from '../Vector';
+import ShadowSprite from '../ShadowSprite';
 
 class Spore extends ShadowSprite {
 	constructor(game, grid, position, canvas) {
