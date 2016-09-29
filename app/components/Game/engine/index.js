@@ -63,7 +63,7 @@ class Game {
 		this.maxX = -1;
 		this.maxY = -1;
 		this.cleared = true;
-		this.moveCamera = false;
+		this.moveCamera = true;
 		this.camera.zoom = 0.129;
 		this.ants = [];
 		this.monsters = [];
