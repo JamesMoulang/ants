@@ -35,6 +35,7 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.16.2",
     "nested": "0.0.1-pre2",
+    "postcss-nested": "^1.0.0",
     "precss": "^1.4.0",
     "react": "^15.3.2",
     "react-codemirror": "^0.2.6",
