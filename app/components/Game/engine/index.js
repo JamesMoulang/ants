@@ -47,6 +47,7 @@ class Game {
 		this.camera = new Camera(this);
 		this.entities = [];
 		this.delta = 1;
+		this.restarting = false;
 		this.world = new Group(this, this.canvas);
 		this.lastInput = null;
 		this.circleCanvases = {};
@@ -72,12 +73,12 @@ class Game {
 		this.antUpdateRate = 12;
 		this.antUpdateCounter = 0;
 		this.antFunction = null;
+		this.firstplay = true;
 
 		var split = Ant.prototype.logic.toString().split('\n');
 		var str = '';
 		for (var i = 1; i < split.length - 1; i++) {
 			var count = (split[i].match('\t') || []).length;
-			console.log(count);
 			if (count >= 1) {
 				split[i] = split[i].replace('\t', '');
 				split[i] = split[i].replace('\t', '');
@@ -158,6 +159,40 @@ class Game {
 		_.each(this.ants, function(ant) {
 			ant.setFunction(this.antFunction);
 		}.bind(this));
+
+		console.log(this.firstplay);
+		if (this.firstplay) {
+			this.firstplay = false;
+		} else {
+			this.restart();
+		}
+	}
+
+	restart() {
+		console.log("RESTART");
+		this.restarting = true;
+		this.world.destroy();
+		this.world = new Group(this, this.canvas);
+		_.each(this.ants, function(ant) {
+			ant.destroy();
+		}.bind(this));
+		this.ants = [];
+
+		_.each(this.monsters, function(monster) {
+			monster.destroy();
+		}.bind(this));
+		this.monsters = [];
+
+		this.nest.destroy();
+
+		this.grid.destroy();
+		this.grid = null;
+		this.activeCells = [];
+
+		this.clear(this.canvas, this.ctx);
+		this.clear(this.monsterCanvas.canvas, this.monsterCanvas.ctx);
+		this.clear(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
+		this.start();
 	}
 
 	pause() {
@@ -224,6 +259,7 @@ class Game {
 
 	start() {
 		if (Images.isLoaded()) {
+			this.restarting = false;
 			this.pauseGroup = new Group(this, this.pauseCanvas.canvas, null, null, null, 1);
 			this.pauseSprite = new Sprite(this, this.camera.position, 'pause', true);
 			this.pauseSprite.anchor.x = 0.5;
@@ -235,6 +271,7 @@ class Game {
 			this.pauseSquare.useGlobalCoords = true;
 			this.pauseSquare.alpha = 0.2;
 
+			console.log("new grid.");
 			this.grid = new Grid(this, 512, 512);
 			this.world.add(this.grid);
 			this.camera.position = new Vector(this.grid.cells.length * 0.5, this.grid.cells.length * 0.5);
@@ -282,39 +319,41 @@ class Game {
 
 	//Game stuff, not rhythm. Can run slower than rhythm.
 	update() {
-		this.pictureCounter += this.delta * this.timescale;
-		if (this.pictureCounter > this.pictureWaitTime) {
-			this.takePicture();
-			this.pictureCounter -= this.pictureWaitTime;
-		}
-		this.world.update();
-		this.antUpdateCounter += this.delta * this.timescale;
-		while(this.antUpdateCounter > this.antUpdateRate) {
-			this.ants = _.filter(this.ants, function(ant) {
-				return ant.alive;
-			});
-			this.monsters = _.filter(this.monsters, function(monster) {
-				return monster.alive;
-			});
+		if (!this.restarting) {
+			this.pictureCounter += this.delta * this.timescale;
+			if (this.pictureCounter > this.pictureWaitTime) {
+				this.takePicture();
+				this.pictureCounter -= this.pictureWaitTime;
+			}
+			this.world.update();
+			this.antUpdateCounter += this.delta * this.timescale;
+			while(this.antUpdateCounter > this.antUpdateRate) {
+				this.ants = _.filter(this.ants, function(ant) {
+					return ant.alive;
+				});
+				this.monsters = _.filter(this.monsters, function(monster) {
+					return monster.alive;
+				});
 
-			_.each(this.ants, function(ant) {
-				ant.tick();
-			});
-			_.each(this.monsters, function(monster) {
-				monster.tick();
-			});
-			this.antUpdateCounter -= this.antUpdateRate;
-		}
+				_.each(this.ants, function(ant) {
+					ant.tick();
+				});
+				_.each(this.monsters, function(monster) {
+					monster.tick();
+				});
+				this.antUpdateCounter -= this.antUpdateRate;
+			}
 
-		this.cellUpdateCounter += this.delta * this.timescale;
-		while(this.cellUpdateCounter > this.cellUpdateRate) {
-			this.activeCells = _.filter(this.activeCells, function(cell) {
-				return cell.active;
-			});
-			_.each(this.activeCells, function(cell) {
-				cell.update();
-			});
-			this.cellUpdateCounter -= this.cellUpdateRate;
+			this.cellUpdateCounter += this.delta * this.timescale;
+			while(this.cellUpdateCounter > this.cellUpdateRate) {
+				this.activeCells = _.filter(this.activeCells, function(cell) {
+					return cell.active;
+				});
+				_.each(this.activeCells, function(cell) {
+					cell.update();
+				});
+				this.cellUpdateCounter -= this.cellUpdateRate;
+			}
 		}
 	}
 
@@ -325,7 +364,7 @@ class Game {
 
 	//Render stuff.
 	render() {
-		if (this.shouldRender) {
+		if (!this.restarting && this.shouldRender) {
 			this.clear(this.monsterCanvas.canvas, this.monsterCanvas.ctx);
 
 			var width = this.maxX - this.minX;

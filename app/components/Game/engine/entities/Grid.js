@@ -61,6 +61,15 @@ class Grid extends Entity {
 		}
 	}
 
+	destroy() {
+		for (var x = 0; x < this.cells.length; x++) {
+			for (var y = 0; y < this.cells[x].length; y++) {
+				this.cells[x][y].destroy();
+			}
+		}
+		super.destroy();
+	}
+
 	getCell(pos) {
 		return this.cells[pos.x][pos.y];
 	}
