@@ -84,8 +84,20 @@ class EditorComponent extends Component {
       		position: 'relative'
       	}}
       >
+        <div style={{
+          padding: '8px', 
+          paddingTop: '2px', 
+          height: '28px', 
+          borderStyle: 'solid', 
+          borderTopWidth: '0px', 
+          borderRightWidth: '0px', 
+          borderLeftWidth: '0px', 
+          borderBottomWidth: '2px'
+        }}>
+          <a style={{position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
+          <p style={{fontFamily: 'monospace', top: '-24px', fontSize: '24px', position: 'relative', display: 'inline-block'}}>Ant.js</p>
+        </div>
         <Codemirror onClick={this.onClick} style={{display: 'block', position: 'absolute'}} ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
-        <a onClick={this.submitCode}>Submit</a>
       </div>
     );
   }

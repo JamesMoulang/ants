@@ -81,6 +81,7 @@ class Game {
 				split[i] = split[i].replace('\t', '');
 				split[i] = split[i].replace('\t', '');
 			}
+			split[i] = split[i].replace(/\t/g, '  ');
 			str += split[i] + '\n';
 		}
 		var blobURL = URL.createObjectURL( new Blob([str], { type: 'application/javascript' } ));
