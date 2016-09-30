@@ -55,7 +55,7 @@ class Game {
 		this._timescale = 200;
 		this.timescale = this._timescale + 0;
 		window.onblur = this.pause.bind(this);
-		window.onfocus = this.play.bind(this);
+		// window.onfocus = this.play.bind(this);
 		this.parent.onblur = this.pause.bind(this);
 		this.parent.onfocus = this.play.bind(this);
 		this.pictureWaitTime = 10000;
