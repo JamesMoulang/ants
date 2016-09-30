@@ -32,7 +32,7 @@ const codes = {
 
 
 class Game {
-	constructor(width, height, parent, canvas, ctx, fps) {
+	constructor(width, height, parent, canvas, ctx, fps, codeLoadCallback) {
 		this.parent = parent;
 		this.currentID = 0;
 		this.canvas = canvas;
@@ -70,6 +70,21 @@ class Game {
 		this.antUpdateRate = 12;
 		this.antUpdateCounter = 0;
 		this.antFunction = null;
+
+		var split = Ant.prototype.logic.toString().split('\n');
+		var str = '';
+		for (var i = 1; i < split.length - 1; i++) {
+			var count = (split[i].match('\t') || []).length;
+			console.log(count);
+			if (count >= 1) {
+				split[i] = split[i].replace('\t', '');
+				split[i] = split[i].replace('\t', '');
+				split[i] = split[i].replace('\t', '');
+			}
+			str += split[i] + '\n';
+		}
+		var blobURL = URL.createObjectURL( new Blob([str], { type: 'application/javascript' } ));
+		this.submitCode(str, codeLoadCallback);
 
 		this.cellUpdateRate = 24;
 		this.cellUpdateCounter = 0;
@@ -124,7 +139,7 @@ class Game {
 
 	submitCode(code, callback) {
 		try {
-			var func = new Function(code);
+			var func = new Function("var Vector = this.Vector;\n" + code);
 			this.updateAntFunction(func);
 			callback(undefined, "Good!");
 		} catch (err) {
@@ -133,6 +148,7 @@ class Game {
 	}
 
 	updateAntFunction(func) {
+		console.log("updating ant function");
 		this.antFunction = func;
 		_.each(this.ants, function(ant) {
 			ant.setFunction(this.antFunction);

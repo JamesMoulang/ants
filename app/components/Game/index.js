@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import GameEngine from './engine';
 import { pause, play } from '../../actions/Game';
-import { successAntCode } from '../../actions/Code';
+import { updateVisualCode, successAntCode } from '../../actions/Code';
 import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
@@ -22,6 +22,9 @@ function mapDispatchToProps(dispatch) {
     },
     successAntCode: () => {
       dispatch(successAntCode());
+    },
+    updateVisualCode: (code) => {
+      dispatch(updateVisualCode(code));
     }
   };
 }
@@ -65,9 +68,19 @@ class GameComponent extends Component {
 		var canvas = this.refs.canvas;
 		var ctx = canvas.getContext('2d');
 		canvas.style.zIndex = -100;
-		var engine = new GameEngine(1024, 768, this.refs.div, canvas, ctx, 30);
+		var engine = new GameEngine(1024, 768, this.refs.div, canvas, ctx, 30, function() {
+      
+    }.bind(this));
 		engine.start();
     this.setState({game: engine});
+    
+    var split = engine.antFunction.toString().split('\n');
+    var str = '';
+    for (var i = 2; i < split.length - 1; i++) {
+      str += split[i] + '\n';
+    }
+    console.log(str);
+    this.props.updateVisualCode(str);
 	}
 
   render() {

@@ -66,4 +66,11 @@ take the weekend off
 then
 - missions.
 	- just use local storage to track progress for now, it doesn't really matter.
-	- 
+	- modal
+	- win conditions
+
+- I could make the ACTUAL ants into something that extends the ant class. And thereby hide methods?
+- Maybe ants should just drop food at the base instead of depositing it in the nest like a bank
+- And a way of dealing with errors.
+	- And restarting the game, etc.
+- How to import into these anonymous functions?

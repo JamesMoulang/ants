@@ -6,6 +6,14 @@ export function updateAntCode(code='') {
 	}
 }
 
+export const UPDATE_VISUAL_CODE = 'UPDATE_VISUAL_CODE';
+export function updateVisualCode(code='') {
+	return {
+		type: UPDATE_VISUAL_CODE,
+		data: code
+	}
+}
+
 export const SUCCESS_ANT_CODE = 'SUCCESS_ANT_CODE';
 export function successAntCode(code='') {
 	return {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Codemirror from 'react-codemirror';
 import { pause, play } from '../../actions/Game';
-import { updateAntCode } from '../../actions/Code'
+import { updateVisualCode, updateAntCode } from '../../actions/Code'
 import { connect } from 'react-redux';
 
 import '../../../node_modules/codemirror/mode/javascript/javascript'
@@ -10,6 +10,7 @@ import '../../../node_modules/codemirror/lib/codemirror.css'
 function mapStateToProps(state) {
   return {
     code: state.Code.code,
+    visualCode: state.Code.visualCode,
     paused: state.Game.paused
   };
 }
@@ -19,8 +20,14 @@ function mapDispatchToProps(dispatch) {
     updateAntCode: (code) => {
       dispatch(updateAntCode(code));
     },
+    updateVisualCode: (code) => {
+      dispatch(updateVisualCode(code));
+    },
     pause: () => {
       dispatch(pause())
+    },
+    play: () => {
+      dispatch(play())
     }
   };
 }
@@ -29,7 +36,7 @@ class EditorComponent extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-      code: "// Code"
+      code: ""
     }
     this.updateCode = this.updateCode.bind(this);
     this.submitCode = this.submitCode.bind(this);
@@ -37,6 +44,7 @@ class EditorComponent extends Component {
 
   submitCode() {
     this.props.updateAntCode(this.state.code);
+    this.props.play();
   }
 
   componentDidMount() {
@@ -44,13 +52,17 @@ class EditorComponent extends Component {
     this.refs.codemirror.getCodeMirror().setSize(this.refs.div.width, this.refs.div.clientHeight-32);
   }
 
+  componentDidUpdate() {
+    if (this.state.code != this.props.visualCode) {
+      this.setState({code: this.props.visualCode});
+    }
+  }
+
   updateCode(newCode) {
     if (!this.props.paused) {
       this.props.pause();
     }
-    this.setState({
-        code: newCode
-    });
+    this.props.updateVisualCode(newCode);
   }
 
   onClick() {

@@ -28,22 +28,16 @@ class Ant extends Square {
 		];
 		this.spiralMoveIndex = this.spiralMoves.length;
 
-		if (this.game.antFunction != null) {
-			this.tick = this.game.antFunction.bind(this);
-		}
+		this.Vector = Vector;
 
-		// this.walkAudio = Audio.create('tick');
-		// this.walkAudio.volume(0.0005);
-		// this.findAudio = Audio.create('Gs3');
-		// this.findAudio.volume(0.05);
-		// this.carryAudio = Audio.create('Cs4');
-		// this.carryAudio.volume(0.01);
-		// this.followAudio = Audio.create('Ds4');
-		// this.followAudio.volume(0.01);
+		if (this.game.antFunction != null) {
+			this.setFunction(this.game.antFunction);
+		}
+		this.state = 'idle';
 	}
 
 	setFunction(func) {
-		this.tick = func.bind(this);
+		this.logic = func.bind(this);
 	}
 
 	lookAroundYou(radius, callback) {
@@ -84,13 +78,6 @@ class Ant extends Square {
 
 	update() {
 		super.update();
-		// if (this.alive) {
-		// 	this.timer += this.game.delta * this.game.timescale;
-		// 	while(this.timer >= this.waitTime) {
-		// 		this.timer -= this.waitTime;
-		// 		this.tick();
-		// 	}	
-		// }
 	}
 
 	destroy() {
@@ -101,95 +88,50 @@ class Ant extends Square {
 		super.destroy();
 	}
 
-	tick() {
-		this.life-=this.game.delta * this.game.timescale * 0.0001;
-		if (this.life <= 0) {
-			this.destroy();
-		} else if (
-			this.grid.inRange(this.position.x, this.position.y) &&
-			this.grid.cells[this.position.x][this.position.y].deathToAnts
-		) {
-			this.grid.cells[this.position.x][this.position.y].deathToAnts = false;
-			this.destroy();
+	//TODO
+	checkState() {
+		return this.state;
+	}
+
+	setState(state) {
+		this.state = state;
+	}
+
+	getFoodNumber() {
+		return 0;
+	}
+
+	lookForFood() {
+		var cell = this.getCell();
+		if (cell == null) {
+			return false;
 		} else {
-			var move = new Vector(0, 0);
+			return cell.food != null && cell.food > 0;
+		}
+	}
 
-			if (this.food == 0) {
-				this.colour = 'black';
-				if (this.spiralMoveIndex < this.spiralMoves.length) {
-					move.x = this.spiralMoves[this.spiralMoveIndex][0];
-					move.y = this.spiralMoves[this.spiralMoveIndex][1];
--
-					this.spiralMoveIndex++;
-				} else {
-					move = new Vector(
-						Math.round((Math.random() - 0.5) * 2), 
-						Math.round((Math.random() - 0.5) * 2)
-					);
-				}
+	pickUpFood() {
+		var cell = this.getCell();
+		if (cell == null) {
+			return false;
+		} else {
+			cell.food--;
+			this.food++;
+			return true;
+		}
+	}
 
-				if (this.grid.inRange(this.position.x, this.position.y)) {
-					var cell = this.grid.cells[this.position.x][this.position.y];
-					if (cell.hasPheromones('danger')) {
-						move = cell.getPheromoneDirection('danger');
-					} else if (cell.hasPheromones('food')) {
-						if (Math.random() > 0.01) {
-							move = cell.getPheromoneDirection('food');
-						} else {
-							move = new Vector(
-								Math.round((Math.random() - 0.5) * 2), 
-								Math.round((Math.random() - 0.5) * 2)
-							);	
-						}
-					} else {
-						// this.walkAudio.play();
-					}
-				}
-
-				this.position.x += move.x;
-				this.position.y += move.y;
-
-				if (this.grid.inRange(this.position.x, this.position.y)) {
-					var dir = this.grid.cells[this.position.x][this.position.y].direction;
-					if ((move.x != 0 || move.y != 0) && dir.x == 0 && dir.y == 0) {
-						var p = new Pheromone(this.game, 'home', 0.75, new Vector(move.x, move.y), 0.01, false);
-						this.grid.cells[this.position.x][this.position.y].addPheromone(p);
-					}
-
-					if (this.grid.cells[this.position.x][this.position.y].food != null &&
-						this.food == 0
-					) {
-						this.grid.cells[this.position.x][this.position.y].food--;
-						this.food++;
-					}
-				}
-			} else {
-				this.colour = 'magenta';
-				if (this.grid.inRange(this.position.x, this.position.y)) {
-					var cell = this.grid.cells[this.position.x][this.position.y];
-					var direction = cell.getPheromoneDirection('home');
-
-					if (direction != null && (direction.x != 0 || direction.y != 0)) {
-						move.x = direction.x*-1;
-						move.y = direction.y*-1;
-						this.life = 100;
-					}
-				}
-
-				this.position.x += move.x;
-				this.position.y += move.y;
-
-				if (this.grid.inRange(this.position.x, this.position.y)) {
-					if (move.x != 0 || move.y != 0) {
-						var p = new Pheromone(this.game, 'food', 0.5, new Vector(move.x * -1, move.y * -1), null, null, 4);
-						this.grid.cells[this.position.x][this.position.y].addPheromone(p);
-					}
-
-					if (this.grid.cells[this.position.x][this.position.y].nest != null) {
-						this.grid.cells[this.position.x][this.position.y].nest.food++;
-						this.food--;
-					}
-				}
+	move(m) {
+		this.lastMove = m;
+		if (this.justMoved()) {
+			var cell = this.getCell();
+			if (cell != null) {
+				cell.occupied--;
+			}
+			this.position = this.position.add(m);
+			var cell = this.getCell();
+			if (cell != null) {
+				cell.occupied++;
 			}
 
 			if (this.position.x < this.game.minX || this.game.minX == -1) {
@@ -204,24 +146,178 @@ class Ant extends Square {
 				this.game.maxY = this.position.y;
 			}
 
-			if (this.grid.inRange(this.position.x, this.position.y)) {
-				if (move.x != 0 || move.y != 0) {
-					this.grid.cells[this.position.x][this.position.y].occupied++;
-					if (this.grid.inRange(this.position.x-move.x, this.position.y-move.y)) {
-						this.grid.cells[this.position.x-move.x][this.position.y-move.y].occupied--;
-					}
+			this.game.shouldRender = true;
+		}
+	}
+
+	justMoved() {
+		return this.lastMove != null && (this.lastMove.x != 0 || this.lastMove.y != 0);
+	}
+
+	moveRandomly() {
+		this.move(new Vector(
+			Math.round((Math.random() - 0.5) * 2), 
+			Math.round((Math.random() - 0.5) * 2)
+		));
+	}
+
+	getCell() {
+		if (this.grid.inRange(this.position.x, this.position.y)) {
+			return this.grid.cells[this.position.x][this.position.y];
+		} else {
+			return null;
+		}
+	}
+
+	checkPheromones() {
+		var cell = this.getCell();
+		var pheromones = {};
+		if (cell != null) {
+			_.each(cell.keys, function(key) {
+				if (this.hasPheromones(key)) {
+					pheromones[key] = true;
 				}
+			}.bind(cell));
+		}
+		return pheromones;
+	}
 
-				if (this.grid.cells[this.position.x][this.position.y].monsters.length > 0) {
+	getPheromoneDirection(type) {
+		var cell = this.getCell();
+		if (cell == null) {
+			return null;
+		} else {
+			return cell.getPheromoneDirection(type);
+		}
+	}
 
+	releasePheromone(key, intensity, direction, degrade, stack, max) {
+		var cell = this.getCell();
+		if (cell != null) {
+			var dir = direction.times(1);
+			var p = new Pheromone(this.game, key, intensity, dir, degrade, stack, max);
+			cell.addPheromone(p);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-					this.grid.cells[this.position.x][this.position.y].monsters[0].attack();
-					this.pheromoneCloud(8, 'danger', '1', 10, false, 1);
+	atNest() {
+		var cell = this.getCell();
+		if (cell == null) {
+			return false;
+		} else {
+			return cell.nest;
+		}
+	}
+
+	depositFood() {
+		if (this.food > 0 && this.atNest()) {
+			var cell = this.getCell();
+			cell.nest.food++;
+			this.food--;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	attack() {
+		var cell = this.getCell();
+		if (cell == null) {
+			return false;
+		} else {
+			cell.monsters[0].attack();
+			return true;
+		}
+	}
+
+	foundMonsters() {
+		var cell = this.getCell();
+		if (cell == null) {
+			return false;
+		} else {
+			return cell.monsters.length > 0;
+		}
+	}
+
+	logic() {
+		var state = this.checkState();
+		if (state == 'idle') {
+			this.setState('looking');
+		} else if (state == 'looking') {
+			if (this.foundMonsters()) {
+				this.attack();
+				this.pheromoneCloud(8, 'danger', '1', 10, false, 1);
+			}
+			var pheromones = this.checkPheromones();
+			if (pheromones.danger) {
+				this.move(this.getPheromoneDirection('danger'));
+			} else if (pheromones.food) {
+				if (Math.random() < 0.01) {
+					this.moveRandomly();
+				} else {
+					this.move(this.getPheromoneDirection('food'));
+				}
+			} else {
+				this.moveRandomly();
+			}
+
+			if (this.justMoved()) {
+				this.releasePheromone('home', 0.75, this.lastMove.times(-1), 0.01, false);
+				if (this.lookForFood()) {
+					this.pickUpFood();
+					this.setState('carrying');
 				}
 			}
+		} else if (state == 'carrying') {
+			var pheromones = this.checkPheromones();
+			if (pheromones.home) {
+				this.move(this.getPheromoneDirection('home'));
+			}
+
+			if (this.justMoved()) {
+				this.releasePheromone('food', 0.75, this.lastMove.times(-1), 0.01, false);
+			}
+
+			if (this.atNest()) {
+				this.depositFood();
+				this.setState('looking');
+			}
+		}
+	}
+
+	setColour() {
+		if (this.food > 0) {
+			if (this.colour != 'magenta') {
+				this.colour = 'magenta';
+				this.game.shouldRender = true;
+			}
+		} else {
+			if (this.colour != 'black') {
+				this.colour = 'black';
+				this.game.shouldRender = true;
+			}
+		}
+	}
+
+	tick() {
+		this.lastMove = null;
+		this.life-=this.game.delta * this.game.timescale * 0.0001;
+		if (this.life <= 0) {
+			this.destroy();
+		} else if (
+			this.grid.inRange(this.position.x, this.position.y) &&
+			this.grid.cells[this.position.x][this.position.y].deathToAnts
+		) {
+			this.grid.cells[this.position.x][this.position.y].deathToAnts = false;
+			this.destroy();
+		} else {
+			this.logic();
 		}
 
-		this.game.shouldRender = true;
+		this.setColour();
 	}
 }
 
