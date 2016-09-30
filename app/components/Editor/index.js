@@ -40,6 +40,7 @@ class EditorComponent extends Component {
     }
     this.updateCode = this.updateCode.bind(this);
     this.submitCode = this.submitCode.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   submitCode() {
@@ -59,14 +60,13 @@ class EditorComponent extends Component {
   }
 
   updateCode(newCode) {
-    if (!this.props.paused) {
-      this.props.pause();
-    }
     this.props.updateVisualCode(newCode);
   }
 
   onClick() {
-    console.log("yo.");
+    if (!this.props.paused) {
+      this.props.pause();
+    }
   }
 
   render() {
@@ -75,7 +75,7 @@ class EditorComponent extends Component {
         mode:  "javascript"
     };
     return (
-      <div 
+      <div
       	ref="div" 
       	style={{
       		width: '100%', 
@@ -97,7 +97,9 @@ class EditorComponent extends Component {
           <a style={{position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
           <p style={{fontFamily: 'monospace', top: '-24px', fontSize: '24px', position: 'relative', display: 'inline-block'}}>Ant.js</p>
         </div>
-        <Codemirror onClick={this.onClick} style={{display: 'block', position: 'absolute'}} ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
+        <div onClick={this.onClick}>
+          <Codemirror style={{display: 'block', position: 'absolute'}} ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
+        </div>
       </div>
     );
   }

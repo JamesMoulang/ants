@@ -5,6 +5,8 @@ import Audio from './Audio';
 import KeyInput from './KeyInput';
 import StateManager from './StateManager';
 import State from './State';
+import Sprite from './Sprite';
+import Square from './Square';
 import Group from './Group';
 import Camera from './Camera';
 import Maths from './Maths';
@@ -92,6 +94,7 @@ class Game {
 		
 		this.canvases = [];
 		this.monsterCanvas = this.createCanvas();
+		this.pauseCanvas = this.createCanvas('pause');
 		window.onresize = this.resizeCanvas.bind(this);
 		this.resizeCanvas();
 
@@ -127,6 +130,7 @@ class Game {
 		Images.load('dandelion_growing_4', '/images/spore_growing_4.png');
 		Images.load('dandelion_complete_idle', '/images/spore_complete_idle.png');
 		Images.load('seed_flying_idle', '/images/seed_flying_idle.png');
+		Images.load('pause', '/images/pause.png');
 
 		Audio.load('tom1', '/tom1.wav');
 		Audio.load('tom2', '/tom2.wav');
@@ -157,10 +161,25 @@ class Game {
 	}
 
 	pause() {
+		if (this.pauseSquare) {
+			console.log('square');
+			this.pauseSquare.x = 0;
+			this.pauseSquare.y = 0;
+			this.pauseSquare.width = this.pauseCanvas.canvas.width;
+			this.pauseSquare.height = this.pauseCanvas.canvas.height;
+			this.pauseSquare.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx, true);
+		}
+
+		if (this.pauseSprite) {
+			this.pauseSprite.position.x = this.pauseCanvas.canvas.width * 0.5;
+			this.pauseSprite.position.y = this.pauseCanvas.canvas.height * 0.5;
+			this.pauseSprite.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
+		}
 		this.timescale = 0;
 	}
 
 	play() {
+		this.clear(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
 		this.timescale = this._timescale + 0;
 	}
 
@@ -205,6 +224,17 @@ class Game {
 
 	start() {
 		if (Images.isLoaded()) {
+			this.pauseGroup = new Group(this, this.pauseCanvas.canvas, null, null, null, 1);
+			this.pauseSprite = new Sprite(this, this.camera.position, 'pause', true);
+			this.pauseSprite.anchor.x = 0.5;
+			this.pauseSprite.anchor.y = 0.5;
+			this.pauseSprite.useGlobalCoords = true;
+			this.pauseSprite.width = this.pauseSprite.height = 128;
+
+			this.pauseSquare = new Square(this, new Vector(0, 0), 16, 'black');
+			this.pauseSquare.useGlobalCoords = true;
+			this.pauseSquare.alpha = 0.2;
+
 			this.grid = new Grid(this, 512, 512);
 			this.world.add(this.grid);
 			this.camera.position = new Vector(this.grid.cells.length * 0.5, this.grid.cells.length * 0.5);
