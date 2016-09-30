@@ -10,8 +10,8 @@ coffee
 
 first up is generalising shadow sprites. DONE
 move monsters over DONE
-make spores land
-wind direction
+make spores land DONE
+wind direction NAH
 
 the idea of spores being their own sprites, moving and landing is just a bit too fiddly.
 should just have a dandelion spread its influence manually to squares nearby.
@@ -54,3 +54,16 @@ made a butternut squash and sausage shepherd's pie, pretty good
 	- layer squash on top of sausages, sprinkle more parmesan, bake at 200C until crispy
 
 drank lots of mint tea and played overwatch
+
+day 5..?
+I think?
+Got code injection working, now, I need to tidy up the ant code.
+Then add docs.
+Then add auto complete
+syntax highlighting DONE but oh man that was harder than I thought it would be.
+
+take the weekend off
+then
+- missions.
+	- just use local storage to track progress for now, it doesn't really matter.
+	- 

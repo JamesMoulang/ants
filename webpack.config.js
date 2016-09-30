@@ -37,11 +37,7 @@ module.exports = {
         loaders: ['babel'],
         include: path.join(__dirname, 'app')
       },
-      {
-        test: /\.css/,
-        loaders: ['style', 'css'],
-        include: [path.join(__dirname, 'app')]
-      }
+      { test: /\.css/, loader: "style-loader!css-loader" }
     ]
   }
 };

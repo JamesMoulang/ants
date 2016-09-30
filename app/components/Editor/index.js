@@ -4,6 +4,9 @@ import { pause, play } from '../../actions/Game';
 import { updateAntCode } from '../../actions/Code'
 import { connect } from 'react-redux';
 
+import '../../../node_modules/codemirror/mode/javascript/javascript'
+import '../../../node_modules/codemirror/lib/codemirror.css'
+
 function mapStateToProps(state) {
   return {
     code: state.Code.code,
@@ -56,7 +59,8 @@ class EditorComponent extends Component {
 
   render() {
     var options = {
-        lineNumbers: true
+        lineNumbers: true,
+        mode:  "javascript"
     };
     return (
       <div 
