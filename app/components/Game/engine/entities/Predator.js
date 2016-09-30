@@ -63,8 +63,6 @@ class Predator extends Monster {
 					));
 				}
 			}
-		} else {
-			console.log("aha!");
 		}
 	}
 }

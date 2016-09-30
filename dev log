@@ -74,3 +74,5 @@ then
 - And a way of dealing with errors.
 	- And restarting the game, etc.
 - How to import into these anonymous functions?
+	- With disgusting hacks, of course.
+

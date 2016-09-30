@@ -92,7 +92,10 @@ class GameComponent extends Component {
       		width: '100%', 
       		height: '100%',
       		overflow: 'hidden',
-      		position: 'relative'
+      		position: 'relative',
+          borderStyle: 'solid',
+          borderTopWidth: '0px',
+          borderLeftWidth: '4px'
       	}}
       >
         <canvas
