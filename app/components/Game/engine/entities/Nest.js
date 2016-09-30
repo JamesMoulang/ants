@@ -14,7 +14,6 @@ class Nest extends Square {
 
 	update() {
 		this.counter += this.game.delta * this.game.timescale;
-		console.log(this.tag);
 		while (this.counter > this.spawnWaitTime) {
 			this.spawnAnt();
 			this.counter -= this.spawnWaitTime;
