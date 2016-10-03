@@ -18,6 +18,8 @@ import Nest from './entities/Nest';
 import Forager from './entities/Forager';
 import Predator from './entities/Predator';
 
+import Campaign from './story/Campaign';
+
 const codes = {
 	w: 87,
 	a: 65,
@@ -74,6 +76,10 @@ class Game {
 		this.antUpdateCounter = 0;
 		this.antFunction = null;
 		this.firstplay = true;
+		this.paused = false;
+		this.pauseSquare = null;
+		this.pauseSprite = null;
+		this.campaign = new Campaign(this);
 
 		var split = Ant.prototype.logic.toString().split('\n');
 		var str = '';
@@ -98,6 +104,10 @@ class Game {
 		this.pauseCanvas = this.createCanvas('pause');
 		window.onresize = this.resizeCanvas.bind(this);
 		this.resizeCanvas();
+
+		this.winCondition = function() {
+			return false;
+		};
 
 		// Images.onLoad = this.start.bind(this);
 		Images.load('monster_asleep_idle', '/images/monster_asleep_idle.png');
@@ -161,9 +171,7 @@ class Game {
 		}.bind(this));
 
 		console.log(this.firstplay);
-		if (this.firstplay) {
-			this.firstplay = false;
-		} else {
+		if (!this.firstplay) {
 			this.restart();
 		}
 	}
@@ -184,6 +192,7 @@ class Game {
 		this.monsters = [];
 
 		this.nest.destroy();
+		this.nest = null;
 
 		this.grid.destroy();
 		this.grid = null;
@@ -191,35 +200,54 @@ class Game {
 
 		this.clear(this.canvas, this.ctx);
 		this.clear(this.monsterCanvas.canvas, this.monsterCanvas.ctx);
-		this.clear(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
 		this.start();
 	}
 
 	pause() {
-		if (this.pauseSquare) {
-			console.log('square');
+		this.shouldRender = true;
+		this.resizeCanvas();
+
+		if (!this.paused) {
+			this.paused = true;
+			if (this.pauseSquare == null) {
+				this.pauseSquare = new Square(this, new Vector(0, 0), 16, 'black');
+				this.pauseSquare.useGlobalCoords = true;
+				this.pauseSquare.alpha = 0.2;
+
+				this.pauseGroup = new Group(this, this.pauseCanvas.canvas, null, null, null, 1);
+				this.pauseSprite = new Sprite(this, this.camera.position, 'pause', true);
+				this.pauseSprite.anchor.x = 0.5;
+				this.pauseSprite.anchor.y = 0.5;
+				this.pauseSprite.useGlobalCoords = true;
+				this.pauseSprite.width = this.pauseSprite.height = 128;
+			}
+
+			console.log("drawing some shit");
+
 			this.pauseSquare.x = 0;
 			this.pauseSquare.y = 0;
 			this.pauseSquare.width = this.pauseCanvas.canvas.width;
 			this.pauseSquare.height = this.pauseCanvas.canvas.height;
 			this.pauseSquare.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx, true);
-		}
 
-		if (this.pauseSprite) {
 			this.pauseSprite.position.x = this.pauseCanvas.canvas.width * 0.5;
 			this.pauseSprite.position.y = this.pauseCanvas.canvas.height * 0.5;
 			this.pauseSprite.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
+
+			this.timescale = 0;
 		}
-		this.timescale = 0;
 	}
 
 	play() {
-		this.clear(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
-		this.timescale = this._timescale + 0;
-	}
+		this.shouldRender = true;
+		this.resizeCanvas();
 
-	takePicture() {
-		// console.log("snap!");
+		if (this.paused) {
+			console.log("PLAY!!");
+			this.paused = false;
+			this.clear(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
+			this.timescale = this._timescale + 0;
+		}
 	}
 
 	createCanvas(id) {
@@ -259,38 +287,40 @@ class Game {
 
 	start() {
 		if (Images.isLoaded()) {
-			this.restarting = false;
-			this.pauseGroup = new Group(this, this.pauseCanvas.canvas, null, null, null, 1);
-			this.pauseSprite = new Sprite(this, this.camera.position, 'pause', true);
-			this.pauseSprite.anchor.x = 0.5;
-			this.pauseSprite.anchor.y = 0.5;
-			this.pauseSprite.useGlobalCoords = true;
-			this.pauseSprite.width = this.pauseSprite.height = 128;
+			// this.showModal(true, {title: 'Hello World', description: 'This is a modal. Take good care of it.'});
 
-			this.pauseSquare = new Square(this, new Vector(0, 0), 16, 'black');
-			this.pauseSquare.useGlobalCoords = true;
-			this.pauseSquare.alpha = 0.2;
+			this.restarting = false;
 
 			console.log("new grid.");
 			this.grid = new Grid(this, 512, 512);
 			this.world.add(this.grid);
-			this.camera.position = new Vector(this.grid.cells.length * 0.5, this.grid.cells.length * 0.5);
 
 			var nest = new Nest(this, this.grid, new Vector(this.grid.cells.length * 0.5, this.grid.cells.length * 0.5));
 			this.grid.cells[nest.position.x][nest.position.y].nest = nest;
 			this.world.add(nest);
 			this.nest = nest;
+			this.camera.position = this.nest.position.add(new Vector(0, 0));
 
-			this.minX = nest.position.x - 16;
-			this.maxX = nest.position.x + 16;
-			this.minY = nest.position.y - 16;
-			this.maxY = nest.position.y + 16;
+			console.log("nest", this.nest.position);
+
+			this.minX = this.nest.position.x - 16;
+			this.maxX = this.nest.position.x + 16;
+			this.minY = this.nest.position.y - 16;
+			this.maxY = this.nest.position.y + 16;
 
 			this.grid.populate();
 			this.grid.bump();
 
 			this.lastTimestamp = this.timestamp();
 			this.loop();
+
+			if (this.firstplay) {
+				this.campaign.start();
+				this.firstplay = false;
+				this.pause();
+			} else {
+				this.play();
+			}
 		} else {
 			setTimeout(this.start.bind(this), 100);
 		}
@@ -320,11 +350,6 @@ class Game {
 	//Game stuff, not rhythm. Can run slower than rhythm.
 	update() {
 		if (!this.restarting) {
-			this.pictureCounter += this.delta * this.timescale;
-			if (this.pictureCounter > this.pictureWaitTime) {
-				this.takePicture();
-				this.pictureCounter -= this.pictureWaitTime;
-			}
 			this.world.update();
 			this.antUpdateCounter += this.delta * this.timescale;
 			while(this.antUpdateCounter > this.antUpdateRate) {
@@ -354,6 +379,10 @@ class Game {
 				});
 				this.cellUpdateCounter -= this.cellUpdateRate;
 			}
+
+			if (this.campaign.active) {
+				this.campaign.update();
+			}
 		}
 	}
 
@@ -376,9 +405,6 @@ class Game {
 
 				var targetX = this.minX + (this.maxX-this.minX)*0.5;
 				var targetY = this.minY + (this.maxY-this.minY)*0.5;
-
-				// targetX = this.monster.position.x;
-				// targetY = this.monster.position.y;
 				
 				this.cleared = false;
 
@@ -388,9 +414,8 @@ class Game {
 					this.clear();
 				}
 
-				if (Math.abs(this.camera.position.x-targetX) != 0 || Math.abs(this.camera.position.y-targetY) != 0) {
-					this.camera.position.x = Maths.towardsValue(this.camera.position.x, this.delta * 0.1 / this.camera.zoom, targetX);
-					this.camera.position.y = Maths.towardsValue(this.camera.position.y, this.delta * 0.1 / this.camera.zoom, targetY);
+				if (this.camera.position.distance(new Vector(targetX, targetY)) > 0) {
+					this.camera.position = new Vector(targetX, targetY);
 					this.clear();
 				}
 			} else {

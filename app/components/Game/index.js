@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GameEngine from './engine';
 import { pause, play } from '../../actions/Game';
 import { updateVisualCode, successAntCode } from '../../actions/Code';
+import { changeModal, hideModal, showModal } from '../../actions/Modal';
 import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
@@ -25,6 +26,15 @@ function mapDispatchToProps(dispatch) {
     },
     updateVisualCode: (code) => {
       dispatch(updateVisualCode(code));
+    },
+    changeModal: (contents) => {
+      dispatch(changeModal(contents))
+    },
+    hideModal: () => {
+      dispatch(hideModal())
+    },
+    showModal: () => {
+      dispatch(showModal())
     }
   };
 }
@@ -71,9 +81,9 @@ class GameComponent extends Component {
 		var engine = new GameEngine(1024, 768, this.refs.div, canvas, ctx, 30, function() {
       
     }.bind(this));
+    engine.showModal = this.showModal.bind(this);
 		engine.start();
     this.setState({game: engine});
-    
     var split = engine.antFunction.toString().split('\n');
     var str = '';
     for (var i = 2; i < split.length - 1; i++) {
@@ -82,6 +92,18 @@ class GameComponent extends Component {
     console.log(str);
     this.props.updateVisualCode(str);
 	}
+
+  showModal(showing, contents) {
+    if (contents) {
+      this.props.changeModal(contents);
+    }
+
+    if (showing) {
+      this.props.showModal();
+    } else {
+      this.props.hideModal();
+    }
+  }
 
   render() {
     return (

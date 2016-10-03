@@ -75,30 +75,46 @@ class EditorComponent extends Component {
         mode:  "javascript"
     };
     return (
-      <div
-      	ref="div" 
-      	style={{
-      		width: '100%', 
-      		height: '100%',
-      		overflow: 'hidden',
-      		position: 'relative'
-      	}}
+      <div>
+        <div
+          onClick={this.onClick}
+          style={{
+            display: this.props.paused ? 'none' : 'inline',
+            opacity: 0.2,
+            background: 'black',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            zIndex: 300,
+            top: -4
+          }}
+        />
+
+        <div
+        ref="div" 
+        style={{
+          width: '100%', 
+          height: '100%',
+          overflow: 'hidden',
+          position: 'absolute'
+        }}
       >
         <div style={{
-          padding: '8px', 
-          paddingTop: '2px', 
-          height: '28px', 
-          borderStyle: 'solid', 
-          borderTopWidth: '0px', 
-          borderRightWidth: '0px', 
-          borderLeftWidth: '0px', 
-          borderBottomWidth: '2px'
-        }}>
-          <a style={{position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
-          <p style={{fontFamily: 'monospace', top: '-24px', fontSize: '24px', position: 'relative', display: 'inline-block'}}>Ant.js</p>
-        </div>
-        <div onClick={this.onClick}>
-          <Codemirror style={{display: 'block', position: 'absolute'}} ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
+            padding: '8px', 
+            paddingTop: '2px', 
+            height: '28px', 
+            borderStyle: 'solid', 
+            borderTopWidth: '0px', 
+            borderRightWidth: '0px', 
+            borderLeftWidth: '0px', 
+            borderBottomWidth: '2px'
+          }}>
+            <a style={{position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
+            <p style={{fontFamily: 'monospace', top: '-24px', fontSize: '24px', position: 'relative', display: 'inline-block'}}>Ant.js</p>
+          </div>
+          <div>
+            <Codemirror style={{display: 'block', position: 'absolute'}} ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
+          </div>
         </div>
       </div>
     );
