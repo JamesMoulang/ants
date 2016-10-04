@@ -203,37 +203,41 @@ class Game {
 		this.start();
 	}
 
+	pauseRender() {
+		if (this.pauseSquare == null) {
+			this.pauseSquare = new Square(this, new Vector(0, 0), 16, 'black');
+			this.pauseSquare.useGlobalCoords = true;
+			this.pauseSquare.alpha = 0.2;
+
+			this.pauseGroup = new Group(this, this.pauseCanvas.canvas, null, null, null, 1);
+			this.pauseSprite = new Sprite(this, this.camera.position, 'pause', true);
+			this.pauseSprite.anchor.x = 0.5;
+			this.pauseSprite.anchor.y = 0.5;
+			this.pauseSprite.useGlobalCoords = true;
+			this.pauseSprite.width = this.pauseSprite.height = 128;
+		}
+
+		this.clear(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
+
+		this.pauseSquare.x = 0;
+		this.pauseSquare.y = 0;
+		this.pauseSquare.width = this.pauseCanvas.canvas.width;
+		this.pauseSquare.height = this.pauseCanvas.canvas.height;
+		this.pauseSquare.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx, true);
+
+		this.pauseSprite.position.x = this.pauseCanvas.canvas.width * 0.5;
+		this.pauseSprite.position.y = this.pauseCanvas.canvas.height * 0.5;
+		this.pauseSprite.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
+	}
+
 	pause() {
 		this.shouldRender = true;
 		this.resizeCanvas();
 
 		if (!this.paused) {
 			this.paused = true;
-			if (this.pauseSquare == null) {
-				this.pauseSquare = new Square(this, new Vector(0, 0), 16, 'black');
-				this.pauseSquare.useGlobalCoords = true;
-				this.pauseSquare.alpha = 0.2;
-
-				this.pauseGroup = new Group(this, this.pauseCanvas.canvas, null, null, null, 1);
-				this.pauseSprite = new Sprite(this, this.camera.position, 'pause', true);
-				this.pauseSprite.anchor.x = 0.5;
-				this.pauseSprite.anchor.y = 0.5;
-				this.pauseSprite.useGlobalCoords = true;
-				this.pauseSprite.width = this.pauseSprite.height = 128;
-			}
-
-			console.log("drawing some shit");
-
-			this.pauseSquare.x = 0;
-			this.pauseSquare.y = 0;
-			this.pauseSquare.width = this.pauseCanvas.canvas.width;
-			this.pauseSquare.height = this.pauseCanvas.canvas.height;
-			this.pauseSquare.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx, true);
-
-			this.pauseSprite.position.x = this.pauseCanvas.canvas.width * 0.5;
-			this.pauseSprite.position.y = this.pauseCanvas.canvas.height * 0.5;
-			this.pauseSprite.render(this.pauseCanvas.canvas, this.pauseCanvas.ctx);
-
+			this.pauseGame();
+			this.pauseRender();
 			this.timescale = 0;
 		}
 	}
@@ -241,6 +245,7 @@ class Game {
 	play() {
 		this.shouldRender = true;
 		this.resizeCanvas();
+		this.playGame();
 
 		if (this.paused) {
 			console.log("PLAY!!");
@@ -380,7 +385,7 @@ class Game {
 				this.cellUpdateCounter -= this.cellUpdateRate;
 			}
 
-			if (this.campaign.active) {
+			if (this.campaign.active && !this.paused) {
 				this.campaign.update();
 			}
 		}
@@ -432,6 +437,10 @@ class Game {
 			_.each(this.monsters, function(monster) {
 				monster.render();
 			}.bind(this));
+
+			if (this.paused) {
+				this.pauseRender();
+			}
 		}
 		this.shouldRender = false;
 

@@ -16,13 +16,17 @@ class Campaign extends ObjectiveManager {
 			function() {
 				var line = 12*12;
 				var complete = false;
+				var _dist = 0;
 				_.each(this.ants, function(ant) {
-					var dist = Math.pow(ant.x-this.nest.x, 2) + Math.pow(ant.y-this.nest.y, 2);
-					if (dist < line) {
+					var dist = 
+						Math.pow(ant.position.x-this.nest.position.x, 2) + 
+						Math.pow(ant.position.y-this.nest.position.y, 2);
+					console.log(dist);
+					if (dist > line) {
 						complete = true;
+						if (dist > _dist) _dist = dist;
 					}
 				}.bind(this));
-
 				return complete;
 			}.bind(this.game)
 		);

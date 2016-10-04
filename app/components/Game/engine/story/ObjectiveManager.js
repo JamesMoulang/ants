@@ -20,10 +20,12 @@ class ObjectiveManager {
 	start() {
 		var obj = this.getCurrentObjective();
 		this.currentObjective = obj;
+		this.active = true;
 		obj.start();
 	}
 
 	finish() {
+		this.active = false;
 		var obj = this.getCurrentObjective();
 		if (obj != null) obj.finish();
 	}

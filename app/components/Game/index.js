@@ -69,6 +69,7 @@ class GameComponent extends Component {
   }
 
   onClick() {
+    console.log("click!", this.props.paused);
     if (this.props.paused) {
       this.props.play();
     }
@@ -84,6 +85,8 @@ class GameComponent extends Component {
     engine.showModal = this.showModal.bind(this);
 		engine.start();
     this.setState({game: engine});
+    engine.playGame = this.props.play.bind(this);
+    engine.pauseGame = this.props.pause.bind(this);
     var split = engine.antFunction.toString().split('\n');
     var str = '';
     for (var i = 2; i < split.length - 1; i++) {
