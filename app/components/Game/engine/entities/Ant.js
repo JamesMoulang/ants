@@ -98,7 +98,16 @@ class Ant extends Square {
 	}
 
 	getFoodNumber() {
-		return 0;
+		var cell = this.getCell();
+		if (cell == null) {
+			return 0;
+		} else {
+			if (cell.food != null) {
+				return cell.food;
+			} else {
+				return 0;
+			}
+		}
 	}
 
 	lookForFood() {
@@ -122,6 +131,16 @@ class Ant extends Square {
 	}
 
 	move(m) {
+		if (m.x > 1) {
+			m.x = 1;
+		} else if (m.x < -1) {
+			m.x = -1;
+		}
+		if (m.y > 1) {
+			m.y = 1;
+		} else if (m.y < -1) {
+			m.y = -1;
+		}
 		this.lastMove = m;
 		if (this.justMoved()) {
 			var cell = this.getCell();
@@ -176,6 +195,19 @@ class Ant extends Square {
 			_.each(cell.keys, function(key) {
 				if (this.hasPheromones(key)) {
 					pheromones[key] = true;
+				}
+			}.bind(cell));
+		}
+		return pheromones;
+	}
+
+	getPheromoneList() {
+		var cell = this.getCell();
+		var pheromones = [];
+		if (cell != null) {
+			_.each(cell.keys, function(key) {
+				if (this.hasPheromones(key)) {
+					pheromones.push(key);
 				}
 			}.bind(cell));
 		}

@@ -38,6 +38,7 @@ class ModalComponent extends Component {
 
 	onClick() {
 		this.props.hideModal();
+		if (this.props.contents.onClose) this.props.contents.onClose();
 	}
 
 	render() {
@@ -66,7 +67,7 @@ class ModalComponent extends Component {
 						borderStyle: 'solid',
 						borderWidth: '4px',
 						borderRadius: '32px',
-						zIndex: 200,
+						zIndex: 205,
 						fontFamily: 'monospace'}}
 						onClick={this.onClick}
 					>

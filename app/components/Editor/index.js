@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Codemirror from 'react-codemirror';
-import { pause, play } from '../../actions/Game';
+import { pause, play, showAPI } from '../../actions/Game';
 import { updateVisualCode, updateAntCode } from '../../actions/Code'
 import { connect } from 'react-redux';
 
@@ -28,6 +28,9 @@ function mapDispatchToProps(dispatch) {
     },
     play: () => {
       dispatch(play())
+    },
+    showAPI: () => {
+      dispatch(showAPI())
     }
   };
 }
@@ -41,6 +44,7 @@ class EditorComponent extends Component {
     this.updateCode = this.updateCode.bind(this);
     this.submitCode = this.submitCode.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.showAPI = this.showAPI.bind(this);
   }
 
   submitCode() {
@@ -69,6 +73,10 @@ class EditorComponent extends Component {
     }
   }
 
+  showAPI() {
+    this.props.showAPI();
+  }
+
   render() {
     var options = {
         lineNumbers: true,
@@ -83,9 +91,10 @@ class EditorComponent extends Component {
             opacity: 0.2,
             background: 'black',
             position: 'absolute',
+            top: 0,
             width: '100%',
             height: '100%',
-            zIndex: 300,
+            zIndex: 204,
             top: -4
           }}
         />
@@ -111,9 +120,12 @@ class EditorComponent extends Component {
           }}>
             <a style={{position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
             <p style={{fontFamily: 'monospace', top: '-24px', fontSize: '24px', position: 'relative', display: 'inline-block'}}>Ant.js</p>
+            <a onClick={this.showAPI} style={{fontFamily: 'monospace', cursor: 'pointer', top: '-24px', float: 'right', fontSize: '24px', position: 'relative', display: 'block'}}> 
+              <p>[API]</p>
+            </a>
           </div>
-          <div>
-            <Codemirror style={{display: 'block', position: 'absolute'}} ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
+          <div style={{display: 'block', position: 'absolute', width: '100%'}}>
+            <Codemirror ref="codemirror" value={this.state.code} onChange={this.updateCode} options={options} />
           </div>
         </div>
       </div>

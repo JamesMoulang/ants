@@ -82,8 +82,8 @@ class GameComponent extends Component {
 		var engine = new GameEngine(1024, 768, this.refs.div, canvas, ctx, 30, function() {
       
     }.bind(this));
-    engine.showModal = this.showModal.bind(this);
-		engine.start();
+    engine._showModal = this.showModal.bind(this);
+		engine.campaign.start();
     this.setState({game: engine});
     engine.playGame = this.props.play.bind(this);
     engine.pauseGame = this.props.pause.bind(this);

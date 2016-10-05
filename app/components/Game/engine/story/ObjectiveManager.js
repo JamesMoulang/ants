@@ -7,6 +7,7 @@ class ObjectiveManager {
 		this.objectives = [];
 		this.objectiveIndex = 0;
 		this.currentObjective = null;
+		this.first = true;
 	}
 
 	update() {
@@ -17,11 +18,22 @@ class ObjectiveManager {
 		}
 	}
 
+	firstModalClose() {
+		if (this.first) {
+			this.game.start();
+			this.first = false;
+		} else {
+			this.game.restart();
+		}
+	}
+
 	start() {
 		var obj = this.getCurrentObjective();
-		this.currentObjective = obj;
-		this.active = true;
-		obj.start();
+		if (obj != null) {
+			this.currentObjective = obj;
+			this.active = true;
+			obj.start();
+		}
 	}
 
 	finish() {
@@ -36,6 +48,7 @@ class ObjectiveManager {
 
 	onObjectiveEnd() {
 		this.objectiveIndex++;
+		this.start();
 	}
 
 	getCurrentObjective() {

@@ -93,7 +93,6 @@ class Game {
 			split[i] = split[i].replace(/\t/g, '  ');
 			str += split[i] + '\n';
 		}
-		var blobURL = URL.createObjectURL( new Blob([str], { type: 'application/javascript' } ));
 		this.submitCode(str, codeLoadCallback);
 
 		this.cellUpdateRate = 24;
@@ -177,6 +176,7 @@ class Game {
 	}
 
 	restart() {
+		console.trace();
 		console.log("RESTART");
 		this.restarting = true;
 		this.world.destroy();
@@ -290,10 +290,24 @@ class Game {
 		return this.currentID;
 	}
 
+	showModal(showing=true, contents) {
+		var c = Object.assign(
+			{}, 
+			{
+				showing: true, 
+				title: 'Hello World', 
+				description: 'This is a modal. Take good care of it.',
+				callback: function() {
+
+				}
+			},
+			contents
+		);
+		this._showModal(showing, contents);
+	}
+
 	start() {
 		if (Images.isLoaded()) {
-			// this.showModal(true, {title: 'Hello World', description: 'This is a modal. Take good care of it.'});
-
 			this.restarting = false;
 
 			console.log("new grid.");
@@ -320,7 +334,6 @@ class Game {
 			this.loop();
 
 			if (this.firstplay) {
-				this.campaign.start();
 				this.firstplay = false;
 				this.pause();
 			} else {
