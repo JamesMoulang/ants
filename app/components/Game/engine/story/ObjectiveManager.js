@@ -43,7 +43,9 @@ class ObjectiveManager {
 	}
 
 	addObjective(introduction, conclusion, winCondition) {
-		this.objectives.push(new Objective(this.game, introduction, conclusion, winCondition, this.onObjectiveEnd.bind(this)));
+		var obj = new Objective(this.game, introduction, conclusion, winCondition, this.onObjectiveEnd.bind(this));
+		obj.level = this.objectives.length;
+		this.objectives.push(obj);
 	}
 
 	onObjectiveEnd() {

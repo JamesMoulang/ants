@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GameEngine from './engine';
-import { pause, play } from '../../actions/Game';
+import { pause, play, setLevel } from '../../actions/Game';
 import { updateVisualCode, successAntCode } from '../../actions/Code';
 import { changeModal, hideModal, showModal } from '../../actions/Modal';
 import { connect } from 'react-redux';
@@ -15,6 +15,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setLevel: (level) => {
+      dispatch(setLevel(level));
+    },
     pause: () => {
       dispatch(pause());
     },
@@ -83,10 +86,11 @@ class GameComponent extends Component {
       
     }.bind(this));
     engine._showModal = this.showModal.bind(this);
-		engine.campaign.start();
-    this.setState({game: engine});
-    engine.playGame = this.props.play.bind(this);
+		engine.playGame = this.props.play.bind(this);
     engine.pauseGame = this.props.pause.bind(this);
+    engine.setLevel = this.setLevel.bind(this);
+    engine.campaign.start();
+    this.setState({game: engine});
     var split = engine.antFunction.toString().split('\n');
     var str = '';
     for (var i = 2; i < split.length - 1; i++) {
@@ -95,6 +99,10 @@ class GameComponent extends Component {
     console.log(str);
     this.props.updateVisualCode(str);
 	}
+
+  setLevel(level) {
+    this.props.setLevel(level);
+  }
 
   showModal(showing, contents) {
     if (contents) {

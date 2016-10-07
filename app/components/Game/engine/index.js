@@ -151,7 +151,7 @@ class Game {
 		Audio.load('Ds4', '/xylophone/Ds4.wav');
 		Audio.load('Fs4', '/xylophone/Fs4.wav');
 	}
-
+	
 	submitCode(code, callback) {
 		try {
 			var func = new Function("var Vector = this.Vector;\n" + code);

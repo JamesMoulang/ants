@@ -39,6 +39,7 @@ class ModalComponent extends Component {
 	onClick() {
 		this.props.hideModal();
 		if (this.props.contents.onClose) this.props.contents.onClose();
+		this.props.pause();
 	}
 
 	render() {

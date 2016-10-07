@@ -76,3 +76,13 @@ then
 - How to import into these anonymous functions?
 	- With disgusting hacks, of course.
 
+right, now
+how to introduce API concepts when they're needed?
+	- Give each one a 'level'
+	- Give a course a level
+	- Only display API concepts with a level less than or equal to the course.
+	- Keep track of level in Game reducer.
+
+build the grid as we go.
+weird code formatting bugs.
+idk why API not updating with level.

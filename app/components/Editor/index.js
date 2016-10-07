@@ -74,6 +74,7 @@ class EditorComponent extends Component {
   }
 
   showAPI() {
+    this.props.pause();
     this.props.showAPI();
   }
 

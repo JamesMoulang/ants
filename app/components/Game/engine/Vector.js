@@ -52,8 +52,9 @@ class Vector {
 	}
 
 	lerp(v2, t) {
+		var _t = Maths.clamp(t, 0, 1);
 		var direction = v2.minus(this);
-		var distance = direction.magnitude() * t;
+		var distance = direction.magnitude() * _t;
 		return this.add(direction.normalised().times(distance));
 	}
 

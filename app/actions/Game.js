@@ -25,3 +25,19 @@ export function hideAPI() {
 		type: HIDE_API
 	}
 }
+
+export const SET_LEVEL = 'SET_LEVEL';
+export function setLevel(level=0) {
+	return {
+		type: SET_LEVEL,
+		data: level
+	}
+}
+
+export const TOGGLE_METHOD = 'TOGGLE_METHOD';
+export function toggleMethod(method) {
+	return {
+		type: TOGGLE_METHOD,
+		data: method
+	}
+}
