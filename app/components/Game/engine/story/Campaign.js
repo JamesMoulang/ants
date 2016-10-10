@@ -7,12 +7,17 @@ class Campaign extends ObjectiveManager {
 		this.addObjective(
 			{
 				title: "Mission: 1", 
-				description: "Get an ant over the finish line. Read the API if you need some help.",
+				description: [
+					"In this game, your nest (red square) will continually create ants (black squares). Write code in the left box and hit the play button to see it run. You're controlling the ant logic - every time the game world updates, the ants will make decisions and move around based on that code.",
+					"Your objective is to move at least one ant outside of the blue circle.",
+					"Read the API for a list of built in functions the ants can use, and more information.",
+					"Click this text box to start the mission!"
+				],
 				onClose: this.firstModalClose.bind(this)
 			}, 
 			{
 				title: "Completed Mission 1",
-				description: "Congratulations!",
+				description: ["Congratulations!"],
 				onClose: this.onObjectiveEnd.bind(this)
 			}, 
 			function() {
@@ -23,43 +28,49 @@ class Campaign extends ObjectiveManager {
 					var dist = 
 						Math.pow(ant.position.x-this.nest.position.x, 2) + 
 						Math.pow(ant.position.y-this.nest.position.y, 2);
-					console.log(dist);
 					if (dist > line) {
 						complete = true;
 						if (dist > _dist) _dist = dist;
 					}
 				}.bind(this));
 				return complete;
-			}.bind(this.game)
+			}.bind(this.game),
+			12,
+			10
 		);
 
 		this.addObjective(
 			{
 				title: "Mission: 2", 
-				description: "Get an ant over the finish line. Read the API if you need some help.",
+				description: [
+					"In addition to moving, ants can leave a pheromone on their current square. Check out the updated API for details.",
+					"Your objective is to fill at least 10% of the blue circle (with radius 12) with pheromones.",
+					"How are you going to keep the ant inside the circle?",
+					"Click this text box to start the mission!"
+				],
 				onClose: this.firstModalClose.bind(this)
 			}, 
 			{
 				title: "Completed Mission 2",
-				description: "Congratulations!",
+				description: [
+					"Congratulations!",
+					"Click this text box to start the next mission."
+				],
 				onClose: this.onObjectiveEnd.bind(this)
 			}, 
 			function() {
-				var line = 12*12;
-				var complete = false;
-				var _dist = 0;
-				_.each(this.ants, function(ant) {
-					var dist = 
-						Math.pow(ant.position.x-this.nest.position.x, 2) + 
-						Math.pow(ant.position.y-this.nest.position.y, 2);
-					console.log(dist);
-					if (dist > line) {
-						complete = true;
-						if (dist > _dist) _dist = dist;
+				var limit = Math.PI * 12*12 * 0.1;
+				var valid = 0;
+				_.each(this.activeCells, function(cell) {
+					if (cell.hasAnyPheromones() && cell.position.distance(this.nest.position) < 12) {
+						valid++;
 					}
 				}.bind(this));
-				return complete;
-			}.bind(this.game)
+				console.log(valid, limit);
+				return valid >= limit;
+			}.bind(this.game),
+			12,
+			10
 		);
 
 		this.addObjective(

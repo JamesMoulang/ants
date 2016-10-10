@@ -247,7 +247,7 @@ class APIComponent extends Component {
           },
           {
             name: 'add',
-            level: 1,
+            level: 10,
             params: 'v2: Vector',
             type: 'Vector',
             description: "Returns a new vector that is the sum of this vector and v2.",
@@ -261,7 +261,7 @@ class APIComponent extends Component {
           },
           {
             name: 'minus',
-            level: 1,
+            level: 10,
             params: 'v2: Vector',
             type: 'Vector',
             description: "Returns a vector that is equal to v2 subtracted from this vector.",
@@ -275,7 +275,7 @@ class APIComponent extends Component {
           },
           {
             name: 'times',
-            level: 1,
+            level: 10,
             params: 'v2: Vector',
             type: 'Vector',
             description: "Returns a vector that is equal to v2 mulitplied by this vector.",
@@ -289,7 +289,7 @@ class APIComponent extends Component {
           },
           {
             name: 'divide',
-            level: 1,
+            level: 10,
             params: 'v2: Vector',
             type: 'Vector',
             description: "Returns a vector that is equal to this vector divided by v2.",
@@ -303,7 +303,7 @@ class APIComponent extends Component {
           },
           {
             name: 'round',
-            level: 1,
+            level: 10,
             params: '',
             type: 'Vector',
             description: "Returns a vector that is equal to this vector, with x and y rounded.",
@@ -316,7 +316,7 @@ class APIComponent extends Component {
           },
           {
             name: 'floor',
-            level: 1,
+            level: 10,
             params: '',
             type: 'Vector',
             description: "Returns a vector that is equal to this vector, with x and y floored to the nearest int.",
@@ -329,7 +329,7 @@ class APIComponent extends Component {
           },
           {
             name: 'ceil',
-            level: 1,
+            level: 10,
             params: '',
             type: 'Vector',
             description: "Returns a vector that is equal to this vector, with x and y ceiled to the nearest int.",
@@ -342,7 +342,7 @@ class APIComponent extends Component {
           },
           {
             name: 'magnitude',
-            level: 1,
+            level: 10,
             params: '',
             type: 'Vector',
             description: "Returns the magnitude of this vector.",
@@ -354,7 +354,7 @@ class APIComponent extends Component {
           },
           {
             name: 'distance',
-            level: 1,
+            level: 10,
             params: 'v2: Vector',
             type: 'Vector',
             description: "Returns the distance between this vector and v2.",
@@ -367,7 +367,7 @@ class APIComponent extends Component {
           },
           {
             name: 'lerp',
-            level: 1,
+            level: 10,
             params: 'v2: Vector, t: number',
             type: 'Vector',
             description: "Returns a vector that is t/1 between this vector and v2.",
@@ -380,7 +380,7 @@ class APIComponent extends Component {
           },
           {
             name: 'normalised',
-            level: 1,
+            level: 10,
             params: '',
             type: 'Vector',
             description: "Returns a vector in the same direction as this vector, with magnitude 1.",
@@ -465,7 +465,7 @@ class APIComponent extends Component {
           },
           {
             name: 'moveRandomly',
-            level: 0,
+            level: 1,
             params: '',
             type: '',
             description: 'Moves the ant in a random direction (or not at all)',
@@ -525,6 +525,7 @@ class APIComponent extends Component {
           },
           {
             name: 'releasePheromone',
+            level: 1,
             params: 'key: string, intensity: number, direction: Vector, degrade: number, stack: boolean, max: number',
             type: 'boolean',
             description: "Leave a pheromone at this square. Returns true if added successfully, otherwise false if couldn't find a square to add to.",

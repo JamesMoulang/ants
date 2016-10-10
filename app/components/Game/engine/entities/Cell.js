@@ -285,6 +285,17 @@ class Cell extends Square {
 		this.checkActive();
 	}
 
+	hasAnyPheromones() {
+		var has = false;
+		for (var i = 0; i < this.keys.length; i++) {
+			if (this.hasPheromones(this.keys[i])) {
+				has = true;
+				break;
+			}
+		}
+		return has;
+	}
+
 	hasPheromones(key) {
 		return this.pheromones[key] && this.pheromones[key].list.length > 0;
 	}
@@ -315,12 +326,7 @@ class Cell extends Square {
 	}
 
 	render(canvas, ctx) {
-		if (this.highlighted) {
-			this.colour = 'red';
-			this.alpha = 1;
-			this.size = 16;
-			super.render(canvas, ctx);
-		} else if (this.food == null) {
+		if (this.food == null) {
 			var colour = {
 				r: 255,
 				g: 255,
@@ -336,6 +342,11 @@ class Cell extends Square {
 					colour.b -= this.pheromones[key].rgb.b * a;
 				}
 			}
+
+			if (this.highlighted) {
+				colour.r -= 255 * 0.2;
+			}
+
 			colour.r = Maths.clamp(colour.r, 0, 255);
 			colour.g = Maths.clamp(colour.g, 0, 255);
 			colour.b = Maths.clamp(colour.b, 0, 255);
@@ -349,16 +360,11 @@ class Cell extends Square {
 			this.size = 16 * (this.food / 8);
 			super.render(canvas, ctx);
 		}
-		// if (this.shouldRender && this.game.camera.inBounds(this.position.x, this.position.y, this.size)) {
-		// 	this.size = 16;
-		// 	for (var i = 0; i < this.keys.length; i++) {
-		// 		var key = this.keys[i];
-		// 		if (key != 'home' && this.pheromones[key].list.length > 0) {
-		// 			this.colour = this.pheromones[key].colour;
-		// 			this.alpha = this.pheromones[key].alpha;
-		// 			super.render(canvas, ctx, true);
-		// 		}
-		// 	}
+
+		// if (this.highlighted) {
+		// 	this.alpha = 0.125;
+		// 	this.colour = 'red';
+		// 	super.render(canvas, ctx);
 		// }
 	}
 }

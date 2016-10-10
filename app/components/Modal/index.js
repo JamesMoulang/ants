@@ -58,6 +58,7 @@ class ModalComponent extends Component {
 
 					<div style={{
 						paddingLeft: '16px', 
+						paddingRight: '16px', 
 						background: 'white', 
 						margin: '0 auto', 
 						left: '25%', 
@@ -73,7 +74,10 @@ class ModalComponent extends Component {
 						onClick={this.onClick}
 					>
 						<h1>{this.props.contents.title}</h1>
-						<p style={{fontSize: 14}}>{this.props.contents.description}</p>
+
+						{this.props.contents.description.map((desc) => {
+							return <p style={{fontSize: 14}}>{desc}</p>
+						})}
 					</div>
 				</div>
 			);

@@ -86,3 +86,42 @@ how to introduce API concepts when they're needed?
 build the grid as we go.
 weird code formatting bugs.
 idk why API not updating with level.
+
+failure conditions.
+redrawing isn't working.
+
+
+CAMPAIGN
+1. Move an ant out of the circle.
+	- move()
+	- moveRandomly()
+	- new Vector(x, y)
+		- floor();
+		- ceil();
+		- round();
+		- maths
+2. Cover at least 24 tiles with pheromones.
+	- justMoved()
+	- leavePheromone()
+3. Cover the circle with pheromones.
+	- checkState();
+	- setState();
+4. Find food and pick it up
+	- getFoodNumber();
+	- lookForFood();
+	- pickUpFood();
+5. Take food back to base.
+	- depositFood();
+	- atNest();
+	- depositFood();
+	- checkPheromones();
+	- getPheromoneList();
+	- getPheromoneDirection();
+6. Take 100 food back to base.
+7. Take x food back to base.
+8. Enemies.
+
+
+
+
+

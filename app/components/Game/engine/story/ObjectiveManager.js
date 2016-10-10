@@ -42,13 +42,15 @@ class ObjectiveManager {
 		if (obj != null) obj.finish();
 	}
 
-	addObjective(introduction, conclusion, winCondition) {
-		var obj = new Objective(this.game, introduction, conclusion, winCondition, this.onObjectiveEnd.bind(this));
+	addObjective(introduction, conclusion, winCondition, line=null, timescale) {
+		console.log(line);
+		var obj = new Objective(this.game, introduction, conclusion, winCondition, function() {}, line, timescale);
 		obj.level = this.objectives.length;
 		this.objectives.push(obj);
 	}
 
 	onObjectiveEnd() {
+		console.trace();
 		this.objectiveIndex++;
 		this.start();
 	}
