@@ -119,7 +119,7 @@ class EditorComponent extends Component {
             borderLeftWidth: '0px', 
             borderBottomWidth: '2px'
           }}>
-            <a style={{background: 'black', width: 24, height: 24, position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
+            <a style={{position: 'relative', marginRight: '16px', top: '-18px', display: 'inline-block', cursor: 'pointer'}} onClick={this.submitCode}><i className="fa fa-play fa-2x"></i></a>
             <p style={{fontFamily: 'monospace', top: '-24px', fontSize: '24px', position: 'relative', display: 'inline-block'}}>Ant.js</p>
             <a onClick={this.showAPI} style={{fontFamily: 'monospace', cursor: 'pointer', top: '-24px', float: 'right', fontSize: '24px', position: 'relative', display: 'block'}}> 
               <p>[API]</p>
