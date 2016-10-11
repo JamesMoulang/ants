@@ -44,8 +44,7 @@ class Campaign extends ObjectiveManager {
 				title: "Mission: 2", 
 				description: [
 					"In addition to moving, ants can leave a pheromone on their current square. Check out the updated API for details.",
-					"Your objective is to fill at least 10% of the blue circle (with radius 12) with pheromones.",
-					"How are you going to keep the ant inside the circle?",
+					"Try to fill 10 squares with pheromones.",
 					"Click this text box to start the mission!"
 				],
 				onClose: this.firstModalClose.bind(this)
@@ -59,10 +58,43 @@ class Campaign extends ObjectiveManager {
 				onClose: this.onObjectiveEnd.bind(this)
 			}, 
 			function() {
-				var limit = Math.PI * 12*12 * 0.1;
+				var limit = 10;
 				var valid = 0;
 				_.each(this.activeCells, function(cell) {
-					if (cell.hasAnyPheromones() && cell.position.distance(this.nest.position) < 12) {
+					if (cell.hasAnyPheromones()) {
+						valid++;
+					}
+				}.bind(this));
+				console.log(valid, limit);
+				return valid >= limit;
+			}.bind(this.game),
+			null,
+			10
+		);
+
+		this.addObjective(
+			{
+				title: "Mission: 3", 
+				description: [
+					"Now, try and cover half of the blue circle in pheromones.",
+					"How are you going to keep the ants inside the circle?",
+					"Click this text box to start the mission!"
+				],
+				onClose: this.firstModalClose.bind(this)
+			}, 
+			{
+				title: "Completed Mission 3",
+				description: [
+					"Congratulations!",
+					"Click this text box to start the next mission."
+				],
+				onClose: this.onObjectiveEnd.bind(this)
+			}, 
+			function() {
+				var limit = Math.PI * 12*12 * 0.5;
+				var valid = 0;
+				_.each(this.activeCells, function(cell) {
+					if (cell.hasAnyPheromones() && cell.position.distance(this.nest.position) <= 12) {
 						valid++;
 					}
 				}.bind(this));
@@ -76,12 +108,12 @@ class Campaign extends ObjectiveManager {
 		this.addObjective(
 			{
 				title: "Final Mission", 
-				description: "There's no objective here - you've reached the end. Congratulations! You can just play with and tweak your ants for as long as you want now.",
+				description: ["There's no objective here - you've reached the end. Congratulations! You can just play with and tweak your ants for as long as you want now."],
 				onClose: this.firstModalClose.bind(this)
 			}, 
 			{
 				title: "Completed Final Mission...?",
-				description: "whaaaat? You must be some kind of hacker.",
+				description: ["whaaaat? You must be some kind of hacker."],
 				onClose: this.onObjectiveEnd.bind(this)
 			}, 
 			function() {

@@ -2,7 +2,7 @@ import * as Actions from '../actions/Game';
 import _ from 'lodash';
 
 export default function Game(state={
-  paused: false,
+  paused: true,
   showingAPI: false,
   level: 0,
   toggledMethods: []

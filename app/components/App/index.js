@@ -28,57 +28,41 @@ class AppComponent extends Component {
   }
 
   render() {
-    if (true) {
-      return (
-        <div style={{position: 'absolute', width: '100%', height: '100vh'}}>
-          {!this.props.showingAPI ? null :
-            <div 
-              style={{
-                width: '100%', 
-                height: '100vh',
-                position: 'absolute',
-                display: this.props.showingAPI ? 'block' : 'none'
-              }}
-            >
-              <Modal/>
-              <API/>
-            </div>
-          }
-
+    return (
+      <div style={{position: 'absolute', width: '100%', height: '100vh'}}>
+        {!this.props.showingAPI ? null :
           <div 
             style={{
               width: '100%', 
               height: '100vh',
-              display: !this.props.showingAPI ? 'block' : 'none'
+              position: 'absolute',
+              display: this.props.showingAPI ? 'block' : 'none'
             }}
           >
             <Modal/>
-            
-            <div style={{position: 'relative', display: 'inline-block', width: this.props.paused ? '70%' : '30%', height: '100%'}}>
-              <Editor/>
-            </div>
-
-            <div style={{position: 'relative', display: 'inline-block', width: this.props.paused ? '30%' : '70%', height: '100%'}}>
-              <Game ref="game"/>
-            </div>
+            <API/>
           </div>
-        </div>
-      );
-    } else {
-      return (
+        }
+
         <div 
           style={{
             width: '100%', 
             height: '100vh',
-            position: 'absolute'
+            display: !this.props.showingAPI ? 'block' : 'none'
           }}
         >
           <Modal/>
+          
+          <div style={{position: 'relative', display: 'inline-block', width: this.props.paused ? '70%' : '30%', height: '100%'}}>
+            <Editor/>
+          </div>
 
-          <API/>
+          <div style={{position: 'relative', display: 'inline-block', width: this.props.paused ? '30%' : '70%', height: '100%'}}>
+            <Game ref="game"/>
+          </div>
         </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
